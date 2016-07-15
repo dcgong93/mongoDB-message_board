@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>Quoting Dojo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script>
+      $(document).ready(function(){
+        console.log("hello");
+      });
+    </script>
+    <style>
+      #header {
+        border-bottom: solid 2px black;
+      }
+      .message_text, .comment_text {
+        margin-bottom: 5px;
+        width:100%;
+      }
+      #comment_section {
+        margin-left:100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="header">The Dojo Message Board</h1>
+      <div id="post_message">
+        <form action="/messages" method="post">
+          Name: <br />
+          <input type="text" name="name" /><br />
+          Message: <br />
+          <textarea class="message_text" rows="5" name="message"></textarea> <br />
+          <button type="submit" name="submit" class="btn btn-success">Post Message</button>
+        </form>
+      </div>
+      <!-- messages -->
+      <% for(var i=0; i < messages.length; i++) { %>
+        <div class="message_posted">
+          <h3>Name: <%= messages[i].name %></h3>
+          <h3>Message: <%= messages[i].message %></h3>
+          <div id="comment_section">
+            <!-- comments -->
+            <% for(var k=0; k < messages[i]._comments.length; k++) { %>
+              <div class="comments_posted">
+                <h5>Name: <%= messages[i]._comments[k].name %></h5>
+                <h5>Comment: <%= messages[i]._comments[k].comment %></h5>
+              </div>
+            <% } %>
+            <!--  -->
+            <form action="/comments" method="post">
+              Name: <br />
+              <input type="text" name="name" /><br />
+              Comment: <br />
+              <input type="hidden" name="id" value= "<%= messages[i]._id%>">
+              <textarea class="comment_text" rows="5" name="comment"></textarea> <br />
+              <button type="submit" name="submit" class="btn btn-success">Post Comment</button>
+            </form>
+          </div>
+        </div>
+      <% } %>
+      <!--  -->
+    </div>
+  </body>
+</html>
